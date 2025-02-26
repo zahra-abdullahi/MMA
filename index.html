@@ -38,6 +38,7 @@
         </div>
     </section>
     
+ 
     <section class="schedule">
         <h2>Upcoming Schedule</h2>
         <div class="grid">
@@ -71,10 +72,35 @@
             </div>
         </div>
     </section>
+    <section class="fundraiser">
+        <h2>Support Our League</h2>
+        <p>Your donations help keep the Mile-HI Muslim Athletics league running strong! Every contribution makes a difference.</p>
     
-    <section class="locations">
-        <h2>Locations</h2>
-        <p>Denver, CO</p>
+        <div class="donation-tracker">
+            <p>Raised: <span id="donationAmount">$0</span> / <span id="goalAmount">$10,000</span></p>
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+        </div>
+    
+        <a href="https://www.gofundme.com/f/support-the-milehi-muslim-basketball-league" 
+           class="donate-button" 
+           target="_blank">Donate Now</a>
+    </section>
+    
+    <script>
+        // Manually update this value or fetch it dynamically in the future
+        let currentDonation = 200; // Change this as donations increase
+        let goalAmount = 5000;
+    
+        // Update UI with formatted donation amount
+        document.getElementById("donationAmount").innerText = `$${currentDonation.toLocaleString()}`;
+        document.getElementById("goalAmount").innerText = `$${goalAmount.toLocaleString()}`;
+    
+        // Calculate and update progress bar
+        let progress = (currentDonation / goalAmount) * 100;
+        document.getElementById("progressBar").style.width = progress + "%";
+    </script>
     </section>
     
     <footer>
