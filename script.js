@@ -62,3 +62,5 @@ document.addEventListener("DOMContentLoaded", function () {
   let percentage = (currentAmount / goalAmount) * 100;
   progressBar.style.width = percentage + "%";
 });
+
+

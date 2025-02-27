@@ -30,15 +30,32 @@
         </div>
     </header>
     
+    <!-- Updated Hero Section with Slideshow -->
     <section class="hero">
+        <div class="slideshow-container">
+            <div class="slide fade">
+                <img src="images/team1.JPG" alt="MMA Jump">
+            </div>
+            <div class="slide fade">
+                <img src="images/team2.JPG" alt="Team Photo">
+            </div>
+            <div class="slide fade">
+                <img src="images/team3.JPG" alt="Game Action">
+            </div>
+
+            <!-- Navigation Arrows -->
+            <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+            <a class="next" onclick="changeSlide(1)">&#10095;</a>
+        </div>
+
+        <!-- Hero Content (Overlay) -->
         <div class="hero-content">
-            <h1>2025 Team Tryouts Now Available</h1>
+            <h1>Welcome to Mile-HI Muslim Athletics</h1>
             <p>Join the best Muslim athletic league in the Mile-High City!</p>
             <a href="register.html" class="btn">Register Now</a>
         </div>
     </section>
-    
- 
+
     <section class="schedule">
         <h2>Upcoming Schedule</h2>
         <div class="grid">
@@ -72,40 +89,54 @@
             </div>
         </div>
     </section>
+
     <section class="fundraiser">
         <h2>Support Our League</h2>
         <p>Your donations help keep the Mile-HI Muslim Athletics league running strong! Every contribution makes a difference.</p>
-    
+
         <div class="donation-tracker">
             <p>Raised: <span id="donationAmount">$0</span> / <span id="goalAmount">$10,000</span></p>
             <div class="progress-bar">
                 <div class="progress" id="progressBar"></div>
             </div>
         </div>
-    
+
         <a href="https://www.gofundme.com/f/support-the-milehi-muslim-basketball-league" 
            class="donate-button" 
            target="_blank">Donate Now</a>
     </section>
-    
+
     <script>
-        // Manually update this value or fetch it dynamically in the future
-        let currentDonation = 200; // Change this as donations increase
+        // Donation Progress Bar
+        let currentDonation = 200;
         let goalAmount = 5000;
-    
-        // Update UI with formatted donation amount
+
         document.getElementById("donationAmount").innerText = `$${currentDonation.toLocaleString()}`;
         document.getElementById("goalAmount").innerText = `$${goalAmount.toLocaleString()}`;
-    
-        // Calculate and update progress bar
+
         let progress = (currentDonation / goalAmount) * 100;
         document.getElementById("progressBar").style.width = progress + "%";
+
+        // Slideshow Functionality
+        let slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+            let slides = document.getElementsByClassName("slide");
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) { slideIndex = 1 }
+            slides[slideIndex - 1].style.display = "block";
+            setTimeout(showSlides, 10000); // Change image every 3 seconds
+        }
+
     </script>
-    </section>
-    
+
     <footer>
         <p>&copy; 2025 Mile-HI Muslim Athletics. All rights reserved.</p>
-        <p>Contact us: <a href="tel:886-998-3888">886-998-3888</a></p>
+        <p>Contact us: <a href="tel:303-901-1502">303-901-1502</a></p>
     </footer>
 </body>
 </html>

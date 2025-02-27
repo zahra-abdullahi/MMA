@@ -31,7 +31,7 @@ header {
 }
 
 header .logo img {
-    height: 50px;
+    height: 100px;
 }
 
 nav ul {
@@ -76,29 +76,9 @@ nav ul li a:hover {
     transform: translateY(-5px);
 }
 
-/* Hero Section */
-.hero {
-    background-image: url('images/banner.jpg');
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: white;
-    position: relative;
-}
 
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-}
+
+
 
 .hero-content {
     position: relative;
@@ -107,12 +87,12 @@ nav ul li a:hover {
 
 .hero-content h1 {
     font-size: 3rem;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .hero-content p {
     font-size: 1.5rem;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .hero-content .btn {
@@ -141,7 +121,7 @@ section {
 }
 
 .section-title {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
     margin-bottom: 40px;
     color: #1D3557;
     position: relative;
@@ -854,3 +834,68 @@ footer p {
 .donate-button:hover {
     background-color: #0056b3;
 }
+.slideshow-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.fade {
+    animation: fadeEffect 1.5s ease-in-out;
+}
+
+@keyframes fadeEffect {
+    from { opacity: 0.4; }
+    to { opacity: 1; }
+}
+.hero {
+    position: relative;
+    width: 90%;
+    height: 60vh; /* Adjust this to change hero size */
+    overflow: hidden;
+}
+
+.slideshow-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Show the entire image without cropping */
+    max-height: 100%; /* Prevent the image from being too tall */
+}
+
+.hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: white;
+    font-size: 2rem;
+    padding: 10px;
+}
+
+.prev { left: 10px; }
+.next { right: 10px; }
+
