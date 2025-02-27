@@ -77,50 +77,50 @@
     <section class="stats">
         <h2>Player Stats & Highlights</h2>
         <div class="grid">
+            <!-- Player of the Week -->
             <div class="card">
-                <h3>Top Scorer</h3>
-                <p>Player: Ahmed Khan</p>
-                <p>Points: 150</p>
+                <h3>Player Of The Week</h3>
+                <img src="images/player.JPG" alt="Mohammed Ali" class="player-img">
+                <p class="player-name">Player: <strong>Mohammed Ali</strong></p>
+                <div class="stats-info">
+                    <p><strong>Points:</strong> 23</p>
+                    <p><strong>Rebounds:</strong> 9</p>
+                    <p><strong>Assists:</strong> 2</p>
+                </div>
             </div>
-            <div class="card">
-                <h3>Most Assists</h3>
-                <p>Player: Yusuf Ali</p>
-                <p>Assists: 75</p>
+    
+            <!-- Player of Last Week -->
+            <div class="card last-week">
+                <h3>Player Of The Game</h3>
+                <img src="images/hamza.JPG" alt="Hamza Mursal" class="player-img">
+                <p class="player-name">Player: <strong>Hamza Mursal</strong></p>
+                <div class="stats-info">
+                    <p><strong>Points:</strong> 40</p>
+                    <p><strong>Rebounds:</strong> 6</p>
+                    <p><strong>Assists:</strong> 3</p>
+                </div>
             </div>
         </div>
     </section>
-
+    
+    
+    
     <section class="fundraiser">
         <h2>Support Our League</h2>
         <p>Your donations help keep the Mile-HI Muslim Athletics league running strong! Every contribution makes a difference.</p>
 
         <div class="donation-tracker">
-            <p>Raised: <span id="donationAmount">$0</span> / <span id="goalAmount">$10,000</span></p>
-            <div class="progress-bar">
-                <div class="progress" id="progressBar"></div>
-            </div>
+            <p>Raised: <span>$290</span> / <span>$5,000</span></p>
+            <progress value="299" max="5000"></progress>
         </div>
-
+        
         <a href="https://www.gofundme.com/f/support-the-milehi-muslim-basketball-league" 
            class="donate-button" 
            target="_blank">Donate Now</a>
     </section>
 
     <script>
-        // Donation Progress Bar
-        let currentDonation = 200;
-        let goalAmount = 5000;
-
-        document.getElementById("donationAmount").innerText = `$${currentDonation.toLocaleString()}`;
-        document.getElementById("goalAmount").innerText = `$${goalAmount.toLocaleString()}`;
-
-        let progress = (currentDonation / goalAmount) * 100;
-        document.getElementById("progressBar").style.width = progress + "%";
-
-        // Slideshow Functionality
-        let slideIndex = 0;
-        showSlides();
-
+       
         function showSlides() {
             let slides = document.getElementsByClassName("slide");
             for (let i = 0; i < slides.length; i++) {
