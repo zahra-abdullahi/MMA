@@ -479,7 +479,7 @@ footer p {
 
 /* Hero Section for Schedule Page */
 .hero-schedule {
-    background-image: url('images/schedule-banner.jpg');
+    background-image: url('images/MMASC.jpg');
     background-size: cover;
     background-position: center;
     height: 60vh;
@@ -628,7 +628,7 @@ footer p {
 
 /* Hero Section for Events Page */
 .hero-events {
-    background-image: url('images/events-banner.jpg');
+    background-image: url('images/kiddos.mp4');
     background-size: cover;
     background-position: center;
     height: 60vh;
@@ -981,4 +981,64 @@ h2::after {
 .player-img {
     object-fit: cover;
     object-position: top center; /* Moves focus to the face */
+}
+.video-container {
+    text-align: center; /* Center the video */
+    margin-top: 20px;
+}
+
+.video-container iframe,
+.video-container video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px; /* Optional: Adds rounded corners */
+}
+.hero-home {
+    background-image: url('images/team2.JPG'); /* Replace with your image */
+    background-size: contain; /* Ensures the whole image is visible */
+    background-repeat: no-repeat; /* Prevents repeating */
+    background-position: center;
+    height: 60vh; /* Reduce height to make the section smaller */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+
+/* Dark Overlay for Better Readability */
+.hero-home::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Adjust transparency as needed */
+}
+
+/* Ensures Text is Above the Overlay */
+.hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Button Styling */
+.btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    color: white;
+    background: #ff5733;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: 0.3s ease-in-out;
+}
+
+.btn:hover {
+    background: #e74c3c;
 }
