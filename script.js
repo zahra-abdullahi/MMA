@@ -10,7 +10,6 @@ document.addEventListener('scroll', () => {
     });
   });
   
-  
 
 
 
