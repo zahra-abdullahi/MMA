@@ -1,116 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - Mile-HI Muslim Athletics</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="script.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Google Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
-    <style>
-        #map {
-            height: 400px;
-            width: 100%;
-            margin-top: 20px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-        }
-        .success-message {
-            color: #155724;
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-        .error-message {
-            color: #721c24;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us - Mile-HI Muslim Athletics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #000;
+      --white: #fff;
+      --accent: #f94c10;
+      --gray: #1a1a1a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: var(--black);
+      color: var(--white);
+    }
+
+    header {
+      background: var(--black);
+      padding: 1.5rem 1rem;
+      border-bottom: 1px solid #222;
+      text-align: center;
+      position: relative;
+      z-index: 1000;
+    }
+
+    header img {
+      height: 60px;
+      margin-bottom: 1rem;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      z-index: 999;
+      position: relative;
+    }
+
+    nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    .hamburger {
+      display: none;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .hamburger div {
+      width: 28px;
+      height: 3px;
+      background-color: var(--white);
+      margin: 5px 0;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.active .bar1 {
+      transform: rotate(-45deg) translate(-6px, 6px);
+    }
+
+    .hamburger.active .bar2 {
+      opacity: 0;
+    }
+
+    .hamburger.active .bar3 {
+      transform: rotate(45deg) translate(-5px, -5px);
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        flex-direction: column;
+        background: var(--black);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        padding: 1rem 0;
+        display: none;
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      nav.active {
+        display: flex;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .hamburger {
+        display: block;
+      }
+    }
+
+    .hero {
+      height: 60vh;
+      background: url('images/hero-athlete.jpg') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      z-index: 0;
+    }
+
+    .hero h1 {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 2px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .contact-wrapper {
+      max-width: 1000px;
+      margin: -3rem auto 4rem;
+      background: #111;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 0 20px rgba(255,255,255,0.05);
+    }
+
+    .contact-wrapper h2 {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1.6rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px;
+      background: #0a0a0a;
+      border: none;
+      border-radius: 8px;
+      color: var(--white);
+      font-size: 1rem;
+    }
+
+    .form-group label {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      color: #777;
+      font-size: 0.85rem;
+      pointer-events: none;
+      transition: 0.3s ease;
+    }
+
+    .form-group input:focus + label,
+    .form-group textarea:focus + label,
+    .form-group input:not(:placeholder-shown) + label,
+    .form-group textarea:not(:placeholder-shown) + label {
+      top: -10px;
+      left: 10px;
+      font-size: 0.7rem;
+      background: #111;
+      padding: 0 6px;
+      color: var(--accent);
+    }
+
+    .cta-btn {
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .cta-btn:hover {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    .map {
+      margin-top: 4rem;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .map iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: #0a0a0a;
+      font-size: 0.9rem;
+      color: #888;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+
+      .contact-wrapper {
+        padding: 1.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <img src="images/logo.png" alt="Mile-HI Muslim Athletics Logo">
-        </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="schedule.html">Schedule</a></li>
-                <li><a href="stats.html">Stats</a></li>
-                <li><a href="events.html">Events</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="tickets.html">Tickets</a></li>
-            </ul>
-        </nav>
-        <div class="cta-buttons">
-            <a href="register.html" class="btn">Register Now</a>
-            <a href="login.html" class="btn">Login</a>
-        </div>
-    </header>
-    
-    <section class="hero-contact">
-        <div class="hero-content">
-            <h1>Contact Us</h1>
-         
-        </div>
-    </section>
-    
-    <section class="contact-info">
-        <div class="contact-details">
-            <h2>Get in Touch</h2>
-            <p><strong>Phone:</strong> <a href="tel:(303) 901-1502">(303) 901-1502</a></p>
-            <p><strong>Email:</strong> <a href="mailto:info@milehimma.com">info@milehimma.com</a></p>
-            <p><strong>Address:</strong> 1234 Sports Ave, Denver, CO 80202</p>
-        </div>
-        
-      
-        
 
-        <div class="contact-form">
-            <h2>Send Us a Message</h2>
-            <form id="contact-form" action="https://formspree.io/f/mqapkygw" method="POST">
-                <div class="form-group">
-                    <input type="text" name="name" placeholder="Your Name" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" name="email" placeholder="Your Email" required>
-                </div>
-                <div class="form-group">
-                    <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="btn">Send Message</button>
-            </form>
-            <div id="form-status"></div> <!-- Success/Error messages -->
-        </div>
-        
+  <header>
+    <img src="images/logo.png" alt="Logo" />
 
-    <!-- Google Maps Section -->
-    <section class="map-section">
-        <h2>Our Location</h2>
-        <div class="map-container">
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3067.781425657198!2d-104.991531!3d39.739235!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x876c78d1b03bcb89%3A0xd7b7740f144c5a69!2sDenver%2C%20CO!5e0!3m2!1sen!2sus!4v1708800000000!5m2!1sen!2sus" 
-                width="100%" 
-                height="400" 
-                style="border:0; border-radius:10px;"
-                allowfullscreen="" 
-                loading="lazy">
-            </iframe>
-        </div>
-    </section>
-    
-    <footer>
-        <p>&copy; 2025 Mile-HI Muslim Athletics. All rights reserved.</p>
-        <p>Contact us: <a href="tel:(303) 901-1502">(303) 901-1502</a></p>
-    </footer>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <div class="bar1"></div>
+      <div class="bar2"></div>
+      <div class="bar3"></div>
+    </div>
 
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="events.html">Events</a>
+      <a href="tickets.html">Tickets</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Let’s Talk</h1>
+  </section>
+
+  <section class="contact-wrapper">
+    <h2>Send a Message</h2>
+    <form action="https://formspree.io/f/mqapkygw" method="POST">
+      <div class="form-group">
+        <input type="text" name="name" placeholder=" " required />
+        <label>Your Name</label>
+      </div>
+      <div class="form-group">
+        <input type="email" name="email" placeholder=" " required />
+        <label>Your Email</label>
+      </div>
+      <div class="form-group">
+        <textarea name="message" rows="5" placeholder=" " required></textarea>
+        <label>Your Message</label>
+      </div>
+      <button type="submit" class="cta-btn">Send Message</button>
+    </form>
+  </section>
+
+  <section class="map">
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3067.781425657198!2d-104.991531!3d39.739235!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x876c78d1b03bcb89%3A0xd7b7740f144c5a69!2sDenver%2C%20CO!5e0!3m2!1sen!2sus!4v1708800000000!5m2!1sen!2sus" 
+      allowfullscreen="" loading="lazy">
+    </iframe>
+  </section>
+
+  <footer>
+    &copy; 2025 Mile-HI Muslim Athletics. All rights reserved.<br />
+    Contact: <a href="tel:3039011502">(303) 901-1502</a>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.getElementById("nav");
+      const burger = document.getElementById("hamburger");
+      nav.classList.toggle("active");
+      burger.classList.toggle("active");
+    }
+  </script>
+
+</body>
+</html>

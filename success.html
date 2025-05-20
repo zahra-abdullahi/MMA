@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ticket Confirmed</title>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Open Sans', sans-serif;
+      background: #ffffff;
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      flex-direction: column;
+      text-align: center;
+      background-image: linear-gradient(120deg, #ffffff 0%, #f2f2f2 100%);
+    }
+
+    .logo {
+      margin-bottom: 20px;
+    }
+
+    .logo img {
+      height: 60px;
+    }
+
+    h1 {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 2.8rem;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: #444;
+      margin-bottom: 30px;
+    }
+
+    .success {
+      font-size: 1rem;
+      color: #28a745;
+      font-weight: bold;
+      margin-bottom: 40px;
+    }
+
+    .button {
+      background: #111;
+      color: #fff;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+
+    .button:hover {
+      background: #444;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo">
+    <img src="images/logo.png" alt="Mile-HI Muslim Athletics Logo" />
+  </div>
+
+  <h1>You're In.</h1>
+  <p>We just emailed your ticket — check your inbox for the QR code.</p>
+  <p class="success">✅ Ticket sent successfully!</p>
+
+  <a href="index.html" class="button">Back to Home</a>
+
+</body>
+</html>

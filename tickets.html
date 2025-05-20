@@ -1,89 +1,386 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buy Tickets</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css"> <!-- FullCalendar CSS -->
-    <script src="https://js.stripe.com/v3/"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script> <!-- FullCalendar JS -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Game Drops | Tickets</title>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Open+Sans&display=swap" rel="stylesheet">
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    :root {
+      --black: #000;
+      --white: #fff;
+      --accent: #f94c10;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: var(--black);
+      color: var(--white);
+    }
+
+    header {
+      background: var(--black);
+      padding: 1.5rem 1rem;
+      border-bottom: 1px solid #222;
+      text-align: center;
+      position: relative;
+      z-index: 1000;
+    }
+
+    header img {
+      height: 50px;
+      margin-bottom: 1rem;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      transition: 0.3s ease;
+    }
+
+    nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    .hamburger {
+      display: none;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .hamburger div {
+      width: 28px;
+      height: 3px;
+      background-color: var(--white);
+      margin: 5px 0;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.active .bar1 {
+      transform: rotate(-45deg) translate(-6px, 6px);
+    }
+
+    .hamburger.active .bar2 {
+      opacity: 0;
+    }
+
+    .hamburger.active .bar3 {
+      transform: rotate(45deg) translate(-5px, -5px);
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        flex-direction: column;
+        background: var(--black);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        padding: 1rem 0;
+        display: none;
+      }
+
+      nav.active {
+        display: flex;
+      }
+
+      .hamburger {
+        display: block;
+      }
+    }
+
+    .title {
+      text-align: center;
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 3rem;
+      margin-top: 2rem;
+      letter-spacing: 2px;
+    }
+
+    .ticket-row {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .ticket {
+      background: var(--white);
+      color: var(--black);
+      padding: 2rem;
+      border-radius: 10px;
+      width: 220px;
+      text-align: center;
+      font-family: 'Archivo Black', sans-serif;
+      transform: rotate(-2deg);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .ticket:nth-child(2) {
+      transform: rotate(2deg);
+    }
+
+    .ticket:hover {
+      transform: scale(1.05);
+    }
+
+    .ticket h3 {
+      margin: 0.5rem 0;
+      font-size: 1.4rem;
+    }
+
+    .ticket p {
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    .ticket button {
+      margin-top: 1rem;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .ticket button:hover {
+      background: var(--accent);
+    }
+
+    .cta {
+      background: var(--white);
+      color: var(--black);
+      text-align: center;
+      padding: 4rem 2rem;
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .cta img {
+      height: 100px;
+      transform: rotate(-25deg);
+      transition: transform 0.3s ease;
+    }
+
+    .cta:hover img {
+      transform: rotate(-5deg) scale(1.1);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .modal-content {
+      background: white;
+      color: black;
+      padding: 2rem;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 12px;
+      margin: 0.7rem 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .modal-content button {
+      padding: 12px 24px;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-weight: bold;
+      font-family: 'Archivo Black', sans-serif;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .modal-content button:hover {
+      background: var(--accent);
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 18px;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: #0a0a0a;
+      font-size: 0.9rem;
+      color: #888;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <img src="images/logo.png" alt="Mile-HI Muslim Athletics Logo">
-        </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="schedule.html">Schedule</a></li>
-                <li><a href="stats.html">Stats</a></li>
-                <li><a href="events.html">Events</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="tickets.html">Tickets</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <main>
-        <h2>Purchase Game Tickets</h2>
-        <div id="calendar"></div>
+  <header>
+    <img src="images/logo.png" alt="MMA Logo">
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <div class="bar1"></div>
+      <div class="bar2"></div>
+      <div class="bar3"></div>
+    </div>
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="events.html">Events</a>
+      <a href="tickets.html">Tickets</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
 
-        <!-- Ticket Purchase Form (Hidden by Default) -->
-        <div id="ticket-form" style="display: none;">
-            <h3>Purchase Tickets</h3>
-            <p id="selected-game"></p>
-            <input type="hidden" id="selected-game-title" value="">
-            <label for="quantity">Quantity (Max 20):</label>
-            <input type="number" id="quantity" min="1" max="20" value="1">
-            <p>Total: $<span id="total-price">10</span></p>
-            <button id="checkout-button">Buy Now</button>
-        </div>
-    </main>
+  <div class="title">GAME DROPS</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const calendarEl = document.getElementById('calendar');
-            const calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: [
-                    { title: 'Game 1', start: '2025-04-12', description: 'Game 1 - $10' },
-                    { title: 'Game 2', start: '2025-04-19', description: 'Game 2 - $10' },
-                    { title: 'Game 3', start: '2025-04-26', description: 'Game 3 - $10' }
-                ],
-                eventClick: function(info) {
-                    document.getElementById('ticket-form').style.display = 'block';
-                    document.getElementById('selected-game').textContent = `You are purchasing tickets for: ${info.event.title} - $10`;
-                    document.getElementById('selected-game-title').value = info.event.title;
-                    document.getElementById('quantity').value = 1;
-                    document.getElementById('total-price').textContent = 10;
-                }
-            });
-            calendar.render();
-        });
+  <div class="ticket-row">
+    <div class="ticket" onclick="openModal('Game 1')">
+      <p>GAME DROP</p>
+      <h3>Game 1</h3>
+      <p>April 12</p>
+      <p>$10</p>
+      <button>Buy</button>
+    </div>
+    <div class="ticket" onclick="openModal('Game 2')">
+      <p>GAME DROP</p>
+      <h3>Game 2</h3>
+      <p>April 19</p>
+      <p>$10</p>
+      <button>Buy</button>
+    </div>
+    <div class="ticket" onclick="openModal('Game 3')">
+      <p>GAME DROP</p>
+      <h3>Game 3</h3>
+      <p>April 26</p>
+      <p>$10</p>
+      <button>Buy</button>
+    </div>
+  </div>
 
-        document.getElementById('quantity').addEventListener('input', function() {
-            const quantity = this.value;
-            const pricePerTicket = 10;
-            document.getElementById('total-price').textContent = quantity * pricePerTicket;
-        });
+  <div class="cta" id="cta">
+    GET YOUR TICKETS.
+    <img src="images/finger.png" alt="Click Icon" />
+  </div>
 
-        document.getElementById("checkout-button").addEventListener("click", async () => {
-            const quantity = document.getElementById("quantity").value;
-            const gameTitle = document.getElementById("selected-game-title").value;
-            const totalPrice = quantity * 10;
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">×</span>
+      <h2 id="modal-title">Game Ticket</h2>
+      <input type="email" id="email" placeholder="Enter your email" required>
+      <input type="number" id="quantity" placeholder="Quantity (1–20)" min="1" max="20" value="1">
+      <button onclick="buyTickets()">Buy Now</button>
+    </div>
+  </div>
 
-            const response = await fetch("/create-checkout-session", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ quantity, totalPrice, gameTitle })
-            });
+  <footer>
+    &copy; 2025 Mile-HI Muslim Athletics. All rights reserved.<br>
+    Questions? <a href="tel:3039011502">(303) 901-1502</a>
+  </footer>
 
-            const session = await response.json();
-            const stripe = Stripe("pk_test_51R2IKxQwM9j9DUoE0dWtfcLzjrNg89AVaaxcVbVrMLjnI1xorShkJP9TsFYAVXw95p7t7uTD85kzPRUQGO9r3FRj00WZfKvhhO");
-            stripe.redirectToCheckout({ sessionId: session.id });
-        });
-    </script>
+  <script>
+    let selectedGame = "";
+
+    function toggleMenu() {
+      const nav = document.getElementById("nav");
+      const burger = document.getElementById("hamburger");
+      nav.classList.toggle("active");
+      burger.classList.toggle("active");
+    }
+
+    function scrollToCTA() {
+      document.getElementById("cta").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function openModal(game) {
+      selectedGame = game;
+      document.getElementById("modal-title").innerText = `Get Tickets for ${game}`;
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    async function buyTickets() {
+      const email = document.getElementById("email").value;
+      const quantity = parseInt(document.getElementById("quantity").value);
+      if (!email || quantity < 1 || quantity > 20) {
+        alert("Please enter a valid email and ticket quantity.");
+        return;
+      }
+
+      await fetch("http://localhost:3000/send-ticket", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, game: selectedGame, quantity })
+      });
+
+      const res = await fetch("http://localhost:3000/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ game: selectedGame, quantity })
+      });
+
+      const session = await res.json();
+      const stripe = Stripe("pk_test_51R2IKxQwM9j9DUoE0dWtfcLzjrNg89AVaaxcVbVrMLjnI1xorShkJP9TsFYAVXw95p7t7uTD85kzPRUQGO9r3FRj00WZfKvhhO");
+      stripe.redirectToCheckout({ sessionId: session.id });
+    }
+  </script>
 </body>
 </html>

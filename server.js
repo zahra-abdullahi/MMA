@@ -1,66 +1,98 @@
-require("dotenv").config(); // Load environment variables from .env file
-const express = require("express");
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY); // Secure API key
-const cors = require("cors");
+require('dotenv').config();
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const nodemailer = require('nodemailer');
+const qr = require('qr-image');
+const path = require('path');
 
 const app = express();
-app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
 
-// Allow CORS only from frontend domain
-app.use(cors({ origin: "http://localhost:3000" })); 
+// Serve frontend files if needed
+app.use(express.static(path.join(__dirname)));
 
-// Define prices for games
-const prices = {
-    game1: 2000, // $20 in cents
-    game2: 2500  // $25 in cents
-};
-
-// Create Stripe checkout session
-app.post("/create-checkout-session", async (req, res) => {
+// Stripe Checkout Session
+app.post('/create-checkout-session', async (req, res) => {
     const { game, quantity } = req.body;
 
-    // Validate game selection
-    if (!prices[game]) {
-        return res.status(400).json({ error: "Invalid game selection" });
+    if (!game || quantity < 1 || quantity > 20) {
+        return res.status(400).json({ error: 'Invalid request data' });
     }
 
     try {
         const session = await stripe.checkout.sessions.create({
-            payment_method_types: ["card"],
-            line_items: [
-                {
-                    price_data: {
-                        currency: "usd",
-                        product_data: { name: game },
-                        unit_amount: prices[game],
-                    },
-                    quantity: quantity,
-                }
-            ],
-            mode: "payment",
-            success_url: "http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}",
-            cancel_url: "http://localhost:3000/cancel",
+            payment_method_types: ['card'],
+            line_items: [{
+                price_data: {
+                    currency: 'usd',
+                    product_data: { name: game },
+                    unit_amount: 1000, // $10 per ticket
+                },
+                quantity,
+            }],
+            mode: 'payment',
+            success_url: `${process.env.CLIENT_URL}/success.html`,
+            cancel_url: `${process.env.CLIENT_URL}/cancel.html`,
         });
 
         res.json({ id: session.id });
-
-    } catch (error) {
-        console.error("Error creating checkout session:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+    } catch (err) {
+        console.error('❌ Stripe error:', err);
+        res.status(500).json({ error: 'Stripe checkout failed' });
     }
 });
 
-// Success route
-app.get("/success", (req, res) => {
-    const sessionId = req.query.session_id;
-    res.send(`Payment successful! Session ID: ${sessionId}`);
+// QR Email Ticket Sender
+app.post('/send-ticket', async (req, res) => {
+    const { email, game, quantity } = req.body;
+
+    if (!email || !game || quantity < 1 || quantity > 20) {
+        return res.status(400).json({ error: 'Invalid ticket request' });
+    }
+
+    console.log("📨 Attempting to send email to:", email);
+    console.log("🎮 Game:", game, "| 🎟️ Quantity:", quantity);
+
+    try {
+        // Create QR code image buffer
+        const qrData = `Game: ${game}\nTickets: ${quantity}`;
+        const qrCodeImage = qr.imageSync(qrData, { type: 'png' });
+
+        // Email setup
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
+        });
+
+        await transporter.sendMail({
+            from: `"Mile-HI Tickets" <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject: `🎟️ Your Ticket(s) for ${game}`,
+            html: `
+                <h2>Thank you for purchasing ${quantity} ticket(s) for <strong>${game}</strong>!</h2>
+                <p>Show this QR code at the entrance:</p>
+            `,
+            attachments: [{
+                filename: 'ticket.png',
+                content: qrCodeImage,
+                contentType: 'image/png',
+            }]
+        });
+
+        console.log("✅ Ticket email sent successfully to", email);
+        res.status(200).json({ message: 'Ticket email sent' });
+    } catch (err) {
+        console.error('❌ Email error:', err);
+        res.status(500).json({ error: err.message || "Failed to send ticket email" });
+    }
 });
 
-// Cancel route
-app.get("/cancel", (req, res) => {
-    res.send("Payment canceled.");
+app.listen(3000, () => {
+    console.log('🚀 Server running on http://localhost:3000');
 });
-
-// Start server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
