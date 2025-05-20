@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Game Drops | Tickets</title>
+  <title>Tickets | Mile-HI Muslim Athletics</title>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Open+Sans&display=swap" rel="stylesheet">
   <script src="https://js.stripe.com/v3/"></script>
   <style>
@@ -23,28 +23,41 @@
       font-family: 'Open Sans', sans-serif;
       background: var(--black);
       color: var(--white);
+      overflow-x: hidden;
     }
 
     header {
       background: var(--black);
-      padding: 1.5rem 1rem;
-      border-bottom: 1px solid #222;
-      text-align: center;
-      position: relative;
-      z-index: 1000;
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333;
+      position: sticky;
+      top: 0;
+      z-index: 999;
     }
 
     header img {
       height: 50px;
-      margin-bottom: 1rem;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: var(--white);
+      margin: 4px 0;
     }
 
     nav {
       display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 2rem;
-      transition: 0.3s ease;
+      gap: 1.5rem;
     }
 
     nav a {
@@ -52,61 +65,10 @@
       text-decoration: none;
       font-weight: bold;
       font-size: 0.95rem;
-      transition: color 0.3s ease;
     }
 
     nav a:hover {
       color: var(--accent);
-    }
-
-    .hamburger {
-      display: none;
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      cursor: pointer;
-      z-index: 1001;
-    }
-
-    .hamburger div {
-      width: 28px;
-      height: 3px;
-      background-color: var(--white);
-      margin: 5px 0;
-      transition: all 0.3s ease;
-    }
-
-    .hamburger.active .bar1 {
-      transform: rotate(-45deg) translate(-6px, 6px);
-    }
-
-    .hamburger.active .bar2 {
-      opacity: 0;
-    }
-
-    .hamburger.active .bar3 {
-      transform: rotate(45deg) translate(-5px, -5px);
-    }
-
-    @media (max-width: 900px) {
-      nav {
-        flex-direction: column;
-        background: var(--black);
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        padding: 1rem 0;
-        display: none;
-      }
-
-      nav.active {
-        display: flex;
-      }
-
-      .hamburger {
-        display: block;
-      }
     }
 
     .title {
@@ -114,48 +76,32 @@
       font-family: 'Archivo Black', sans-serif;
       font-size: 3rem;
       margin-top: 2rem;
-      letter-spacing: 2px;
     }
 
     .ticket-row {
       display: flex;
       justify-content: center;
-      gap: 2rem;
-      margin-top: 3rem;
       flex-wrap: wrap;
+      gap: 2rem;
+      margin: 3rem auto;
+      max-width: 1200px;
     }
 
     .ticket {
       background: var(--white);
       color: var(--black);
-      padding: 2rem;
-      border-radius: 10px;
-      width: 220px;
+      padding: 2.5rem;
+      border-radius: 16px;
       text-align: center;
       font-family: 'Archivo Black', sans-serif;
-      transform: rotate(-2deg);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-      position: relative;
       cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-
-    .ticket:nth-child(2) {
-      transform: rotate(2deg);
+      width: 320px;
+      transition: transform 0.3s ease;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
     }
 
     .ticket:hover {
       transform: scale(1.05);
-    }
-
-    .ticket h3 {
-      margin: 0.5rem 0;
-      font-size: 1.4rem;
-    }
-
-    .ticket p {
-      font-size: 1rem;
-      font-weight: bold;
     }
 
     .ticket button {
@@ -163,49 +109,26 @@
       background: var(--black);
       color: var(--white);
       border: none;
-      padding: 12px 20px;
+      padding: 12px 24px;
       border-radius: 30px;
+      font-weight: bold;
       cursor: pointer;
-      transition: 0.3s ease;
     }
 
     .ticket button:hover {
       background: var(--accent);
     }
 
-    .cta {
-      background: var(--white);
-      color: var(--black);
-      text-align: center;
-      padding: 4rem 2rem;
-      font-family: 'Archivo Black', sans-serif;
-      font-size: 2rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-
-    .cta img {
-      height: 100px;
-      transform: rotate(-25deg);
-      transition: transform 0.3s ease;
-    }
-
-    .cta:hover img {
-      transform: rotate(-5deg) scale(1.1);
-    }
-
     .modal {
       display: none;
       position: fixed;
       top: 0; left: 0;
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
       background: rgba(0, 0, 0, 0.85);
       justify-content: center;
       align-items: center;
-      z-index: 999;
+      z-index: 9999;
     }
 
     .modal-content {
@@ -216,12 +139,7 @@
       width: 90%;
       max-width: 400px;
       text-align: center;
-      animation: popIn 0.3s ease;
-    }
-
-    @keyframes popIn {
-      from { transform: scale(0.95); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+      position: relative;
     }
 
     .modal-content input {
@@ -240,7 +158,6 @@
       border-radius: 30px;
       font-weight: bold;
       font-family: 'Archivo Black', sans-serif;
-      transition: 0.2s;
       cursor: pointer;
     }
 
@@ -268,13 +185,46 @@
       color: var(--accent);
       text-decoration: none;
     }
+
+    @media screen and (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        padding-top: 1rem;
+      }
+
+      nav.active {
+        display: flex;
+      }
+
+      .hamburger {
+        display: flex;
+        position: absolute;
+        right: 2rem;
+        top: 1.5rem;
+      }
+
+      .title {
+        font-size: 2rem;
+      }
+
+      .ticket {
+        width: 90%;
+      }
+    }
   </style>
 </head>
 <body>
 
   <header>
-    <img src="images/logo.png" alt="MMA Logo">
-    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <img src="images/logo.png" alt="Logo" />
+    <div class="hamburger" onclick="toggleMenu()" id="hamburger">
       <div class="bar1"></div>
       <div class="bar2"></div>
       <div class="bar3"></div>
@@ -313,11 +263,7 @@
     </div>
   </div>
 
-  <div class="cta" id="cta">
-    GET YOUR TICKETS.
-    <img src="images/finger.png" alt="Click Icon" />
-  </div>
-
+  <!-- Modal -->
   <div id="modal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">×</span>
@@ -330,17 +276,15 @@
 
   <footer>
     &copy; 2025 Mile-HI Muslim Athletics. All rights reserved.<br>
-    Questions? <a href="tel:3039011502">(303) 901-1502</a>
+    Need help? <a href="tel:3039011502">(303) 901-1502</a>
   </footer>
 
   <script>
+    const API_BASE_URL = "https://your-api-url.com"; // Replace with your Render backend URL
     let selectedGame = "";
 
     function toggleMenu() {
-      const nav = document.getElementById("nav");
-      const burger = document.getElementById("hamburger");
-      nav.classList.toggle("active");
-      burger.classList.toggle("active");
+      document.getElementById("nav").classList.toggle("active");
     }
 
     function scrollToCTA() {
@@ -360,27 +304,34 @@
     async function buyTickets() {
       const email = document.getElementById("email").value;
       const quantity = parseInt(document.getElementById("quantity").value);
+
       if (!email || quantity < 1 || quantity > 20) {
         alert("Please enter a valid email and ticket quantity.");
         return;
       }
 
-      await fetch("http://localhost:3000/send-ticket", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, game: selectedGame, quantity })
-      });
+      try {
+        await fetch(`${API_BASE_URL}/send-ticket`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, game: selectedGame, quantity })
+        });
 
-      const res = await fetch("http://localhost:3000/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ game: selectedGame, quantity })
-      });
+        const res = await fetch(`${API_BASE_URL}/create-checkout-session`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ game: selectedGame, quantity })
+        });
 
-      const session = await res.json();
-      const stripe = Stripe("pk_test_51R2IKxQwM9j9DUoE0dWtfcLzjrNg89AVaaxcVbVrMLjnI1xorShkJP9TsFYAVXw95p7t7uTD85kzPRUQGO9r3FRj00WZfKvhhO");
-      stripe.redirectToCheckout({ sessionId: session.id });
+        const session = await res.json();
+        const stripe = Stripe("pk_test_51R2IKxQwM9j9DUoE0dWtfcLzjrNg89AVaaxcVbVrMLjnI1xorShkJP9TsFYAVXw95p7t7uTD85kzPRUQGO9r3FRj00WZfKvhhO");
+        stripe.redirectToCheckout({ sessionId: session.id });
+      } catch (err) {
+        alert("Something went wrong. Please try again.");
+        console.error(err);
+      }
     }
   </script>
+
 </body>
 </html>
