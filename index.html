@@ -260,28 +260,114 @@
     </nav>
   </header>
 
-  <section class="hero">
-    <div>
+  <section class="hero" style="position:relative;">
+    <div style="position:relative;z-index:2;">
       <h1>Mile-HI Muslim Athletics</h1>
       <p>Built Different. Powered by Passion.</p>
       <a href="tickets.html"><button class="cta-btn">Get Your Tickets</button></a>
     </div>
+    <div id="hero-slideshow" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;display:flex;justify-content:center;align-items:center;pointer-events:none;">
+      <img src="images/MMAJUMP.JPG" alt="Jump Shot" class="slide-img" style="width:60vw;max-width:900px;height:70vh;object-fit:cover;opacity:0.35;filter:blur(0.5px);border-radius:30px;transition:opacity 0.8s;position:absolute;">
+      <img src="images/Kids2.jpg" alt="Kids Team" class="slide-img" style="width:60vw;max-width:900px;height:70vh;object-fit:cover;opacity:0;filter:blur(0.5px);border-radius:30px;transition:opacity 0.8s;position:absolute;">
+      <img src="images/team3.JPG" alt="Team 3" class="slide-img" style="width:60vw;max-width:900px;height:70vh;object-fit:cover;opacity:0;filter:blur(0.5px);border-radius:30px;transition:opacity 0.8s;position:absolute;">
+    </div>
   </section>
+  <script>
+    // Slideshow logic for hero images
+    const slides = document.querySelectorAll('.slide-img');
+    let currentSlide = 0;
+    setInterval(() => {
+      slides.forEach((img, i) => img.style.opacity = i === currentSlide ? '0.35' : '0');
+      currentSlide = (currentSlide + 1) % slides.length;
+    }, 3500);
+
+    // Countdown timer for next game
+    function updateCountdown() {
+      const nextGame = new Date('2025-11-12T18:00:00');
+      const now = new Date();
+      const diff = nextGame - now;
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000*60*60*24));
+        const hours = Math.floor((diff / (1000*60*60)) % 24);
+        const mins = Math.floor((diff / (1000*60)) % 60);
+        document.getElementById('countdown').textContent = `Next Game: ${days}d ${hours}h ${mins}m`;
+      } else {
+        document.getElementById('countdown').textContent = 'Game in progress!';
+      }
+    }
+    setInterval(updateCountdown, 60000);
+    updateCountdown();
+
+    // Confetti animation
+    function celebrate() {
+      for(let i=0;i<80;i++){
+        const conf = document.createElement('div');
+        conf.style.position='fixed';
+        conf.style.left=Math.random()*100+'vw';
+        conf.style.top='-30px';
+        conf.style.width='12px';
+        conf.style.height='12px';
+        conf.style.background=`hsl(${Math.random()*360},80%,60%)`;
+        conf.style.borderRadius='50%';
+        conf.style.zIndex=9999;
+        conf.style.opacity=0.8;
+        conf.style.transition='top 2.2s linear';
+        document.body.appendChild(conf);
+        setTimeout(()=>{conf.style.top='100vh';},10);
+        setTimeout(()=>{conf.remove();},2200);
+      }
+      document.getElementById('cheer-audio').play();
+    }
+
+    // MVP voting
+    function voteMVP(name) {
+      document.getElementById('vote-result').textContent = `You voted for ${name}!`;
+    }
+
+    // Player card hover fun fact
+    document.querySelectorAll('.player-card').forEach(card => {
+      card.addEventListener('mouseenter',()=>{
+        card.querySelector('.player-fact').style.display='block';
+      });
+      card.addEventListener('mouseleave',()=>{
+        card.querySelector('.player-fact').style.display='none';
+      });
+    });
+  </script>
 
   <div class="drop-banner">
     🚨 GAME DROP: LIMITED SEATS AVAILABLE
+    <span id="countdown" style="margin-left:2rem;font-weight:bold;color:var(--accent);"></span>
   </div>
+
+  <audio id="cheer-audio" src="images/finger.png" style="display:none;"></audio>
+
+  <section class="gallery-section" style="max-width:1100px;margin:2rem auto 0 auto;padding:0 1.5rem;text-align:center;">
+    <h2 style="color:var(--accent);margin-bottom:1.5rem;">League Highlights</h2>
+    <video src="images/kids4.mp4" controls autoplay loop muted style="width:100%;max-width:700px;border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,0.18);margin-bottom:2rem;"></video>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;">
+      <img src="images/MMAJUMP.JPG" alt="Jump Shot" style="width:100%;height:160px;object-fit:cover;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.18);">
+      <img src="images/Kids2.jpg" alt="Kids Team" style="width:100%;height:160px;object-fit:cover;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.18);">
+      <img src="images/team3.JPG" alt="Team 3" style="width:100%;height:160px;object-fit:cover;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.18);">
+      <img src="images/team4.JPG" alt="Team 4" style="width:100%;height:160px;object-fit:cover;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.18);">
+      <img src="images/team5.JPG" alt="Team 5" style="width:100%;height:160px;object-fit:cover;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.18);">
+      <img src="images/team6.JPG" alt="Team 6" style="width:100%;height:160px;object-fit:cover;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.18);">
+      <img src="images/team7.JPG" alt="Team 7" style="width:100%;height:160px;object-fit:cover;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.18);">
+    </div>
+  </section>
 
   <section class="section">
     <h2>Upcoming Games</h2>
     <div class="card-grid">
       <div class="card">
+        <img src="images/team1.JPG" alt="DOD Team" style="width:100%;max-width:220px;border-radius:12px;margin-bottom:1rem;box-shadow:0 4px 16px rgba(0,0,0,0.18);">
         <h3>DOD vs. DMG</h3>
         <p>Date: Feb 28, 2025</p>
         <p>Time: 5:00 PM</p>
         <p>Location: PICKUP USA</p>
       </div>
       <div class="card">
+        <img src="images/team2.JPG" alt="HALALBOYZ Team" style="width:100%;max-width:220px;border-radius:12px;margin-bottom:1rem;box-shadow:0 4px 16px rgba(0,0,0,0.18);">
         <h3>HALALBOYZ vs. ISLAMIC PACERS</h3>
         <p>Date: Nov 12, 2025</p>
         <p>Time: 6:00 PM</p>
@@ -293,14 +379,24 @@
   <section class="section">
     <h2>Featured Players</h2>
     <div class="card-grid">
-      <div class="card">
+      <div class="card player-card" style="position:relative;">
+        <img src="images/player.JPG" alt="Mohammed Ali" style="width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
         <h3>Mohammed Ali</h3>
         <p>🔥 23 Points, 9 Rebounds, 2 Assists</p>
+        <span class="player-fact" style="display:none;position:absolute;top:10px;right:10px;background:var(--accent);color:white;padding:6px 12px;border-radius:8px;font-size:0.9rem;">Fun Fact: Fastest 3-pointer in league!</span>
       </div>
-      <div class="card">
+      <div class="card player-card" style="position:relative;">
+        <img src="images/hamza.JPG" alt="Hamza Mursal" style="width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
         <h3>Hamza Mursal</h3>
         <p>🔥 40 Points, 6 Rebounds, 3 Assists</p>
+        <span class="player-fact" style="display:none;position:absolute;top:10px;right:10px;background:var(--accent);color:white;padding:6px 12px;border-radius:8px;font-size:0.9rem;">Fun Fact: Dunked on 3 defenders!</span>
       </div>
+    </div>
+    <div style="margin-top:2rem;">
+      <h3 style="color:var(--accent);margin-bottom:1rem;">Who is your MVP?</h3>
+      <button onclick="voteMVP('Ali')" class="cta-btn" style="margin-right:1rem;">Mohammed Ali</button>
+      <button onclick="voteMVP('Hamza')" class="cta-btn">Hamza Mursal</button>
+      <span id="vote-result" style="margin-left:2rem;font-weight:bold;color:var(--accent);"></span>
     </div>
   </section>
 
@@ -308,7 +404,7 @@
     <h2>Support the League</h2>
     <p>Your donations fuel our mission. Help us build a stronger future.</p>
     <a href="https://www.gofundme.com/f/support-the-milehi-muslim-basketball-league" target="_blank">
-      <button class="cta-btn" style="margin-top: 1rem;">Donate Now</button>
+      <button class="cta-btn" style="margin-top: 1rem;" onclick="celebrate()">Donate Now</button>
     </a>
   </section>
 

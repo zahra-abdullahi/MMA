@@ -76,6 +76,14 @@
       font-family: 'Archivo Black', sans-serif;
       font-size: 3rem;
       margin-top: 2rem;
+      position: relative;
+    }
+
+    .title #countdown {
+      display: block;
+      font-size: 1.2rem;
+      color: var(--accent);
+      margin-top: 0.5rem;
     }
 
     .ticket-row {
@@ -98,10 +106,32 @@
       width: 320px;
       transition: transform 0.3s ease;
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      position: relative;
     }
 
     .ticket:hover {
       transform: scale(1.05);
+    }
+
+    .ticket img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    }
+
+    .ticket-fact {
+      display: none;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--accent);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
     }
 
     .ticket button {
@@ -140,6 +170,7 @@
       max-width: 400px;
       text-align: center;
       position: relative;
+      animation: popIn 0.5s;
     }
 
     .modal-content input {
@@ -218,6 +249,11 @@
         width: 90%;
       }
     }
+
+    @keyframes popIn {
+      0% { transform: scale(0.7); }
+      100% { transform: scale(1); }
+    }
   </style>
 </head>
 <body>
@@ -237,28 +273,39 @@
     </nav>
   </header>
 
-  <div class="title">GAME DROPS</div>
+  <div class="title">
+    GAME DROPS
+    <span id="countdown"></span>
+  </div>
+
+  <audio id="cheer-audio" src="images/finger.png" style="display:none;"></audio>
 
   <div class="ticket-row">
     <div class="ticket" onclick="openModal('Game 1')">
+      <img src="images/team1.JPG" alt="Game 1 Teams">
       <p>GAME DROP</p>
       <h3>Game 1</h3>
       <p>April 12</p>
       <p>$10</p>
+      <span class="ticket-fact">🔥 Last game sold out!</span>
       <button>Buy</button>
     </div>
     <div class="ticket" onclick="openModal('Game 2')">
+      <img src="images/team2.JPG" alt="Game 2 Teams">
       <p>GAME DROP</p>
       <h3>Game 2</h3>
       <p>April 19</p>
       <p>$10</p>
+      <span class="ticket-fact">🎉 Free merch for first 20!</span>
       <button>Buy</button>
     </div>
     <div class="ticket" onclick="openModal('Game 3')">
+      <img src="images/team3.JPG" alt="Game 3 Teams">
       <p>GAME DROP</p>
       <h3>Game 3</h3>
       <p>April 26</p>
       <p>$10</p>
+      <span class="ticket-fact">🏆 Rivalry match!</span>
       <button>Buy</button>
     </div>
   </div>
@@ -276,7 +323,10 @@
 
   <footer>
     &copy; 2025 Mile-HI Muslim Athletics. All rights reserved.<br>
-    Need help? <a href="tel:3039011502">(303) 901-1502</a>
+    Need help? <a href="tel:3039011502">(303) 901-1502</a><br>
+    <a href="https://www.instagram.com/mma_denver/" target="_blank" style="color:var(--accent);font-weight:bold;display:inline-block;margin-top:0.5rem;">
+      <img src="images/logo.png" alt="Instagram" style="height:22px;vertical-align:middle;margin-right:6px;">Follow us on Instagram @mma_denver
+    </a>
   </footer>
 
   <script>
@@ -300,6 +350,54 @@
     function closeModal() {
       document.getElementById("modal").style.display = "none";
     }
+
+    // Countdown timer for next game
+    function updateCountdown() {
+      const nextGame = new Date('2025-11-12T18:00:00');
+      const now = new Date();
+      const diff = nextGame - now;
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000*60*60*24));
+        const hours = Math.floor((diff / (1000*60*60)) % 24);
+        const mins = Math.floor((diff / (1000*60)) % 60);
+        document.getElementById('countdown').textContent = `Next Game: ${days}d ${hours}h ${mins}m`;
+      } else {
+        document.getElementById('countdown').textContent = 'Game in progress!';
+      }
+    }
+    setInterval(updateCountdown, 60000);
+    updateCountdown();
+
+    // Confetti animation
+    function celebrate() {
+      for(let i=0;i<80;i++){
+        const conf = document.createElement('div');
+        conf.style.position='fixed';
+        conf.style.left=Math.random()*100+'vw';
+        conf.style.top='-30px';
+        conf.style.width='12px';
+        conf.style.height='12px';
+        conf.style.background=`hsl(${Math.random()*360},80%,60%)`;
+        conf.style.borderRadius='50%';
+        conf.style.zIndex=9999;
+        conf.style.opacity=0.8;
+        conf.style.transition='top 2.2s linear';
+        document.body.appendChild(conf);
+        setTimeout(()=>{conf.style.top='100vh';},10);
+        setTimeout(()=>{conf.remove();},2200);
+      }
+      document.getElementById('cheer-audio').play();
+    }
+
+    // Ticket card hover fun fact
+    document.querySelectorAll('.ticket').forEach(card => {
+      card.addEventListener('mouseenter',()=>{
+        card.querySelector('.ticket-fact').style.display='block';
+      });
+      card.addEventListener('mouseleave',()=>{
+        card.querySelector('.ticket-fact').style.display='none';
+      });
+    });
 
     async function buyTickets() {
       const email = document.getElementById("email").value;
@@ -326,6 +424,7 @@
         const session = await res.json();
         const stripe = Stripe("pk_test_51R2IKxQwM9j9DUoE0dWtfcLzjrNg89AVaaxcVbVrMLjnI1xorShkJP9TsFYAVXw95p7t7uTD85kzPRUQGO9r3FRj00WZfKvhhO");
         stripe.redirectToCheckout({ sessionId: session.id });
+        celebrate();
       } catch (err) {
         alert("Something went wrong. Please try again.");
         console.error(err);
